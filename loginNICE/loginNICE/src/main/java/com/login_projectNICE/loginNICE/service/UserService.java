@@ -38,6 +38,7 @@ public class UserService {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     public String login(User user) throws AccessDeniedException {
+        System.out.println(user.getEmail()+"  "+user.getPassword());
         User userFound = userRepository.validateUser(user.getEmail(), user.getPassword());
         if(userFound != null){
             return jwtUtil.create(String.valueOf(userFound.getId()), userFound.getEmail());

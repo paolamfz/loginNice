@@ -1,78 +1,103 @@
 import React, { useState } from "react";
-import {Home} from './Home'
+import { login } from "../services/user";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
-  const [miLogin, setMiLogin] = useState("false");
-  const [usu, setUsu] = useState("");
-  const [pas, setPas] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  function iniciarSesion(e) {
-    e.preventDefault();
-    var txtusu = document.getElementById("txtusu").value; //Captura el texto que esta dentro de la caja usuario
-    var txtpas = document.getElementById("txtpas").value; //Captura el texto que esta dentro de la caja password
-    if (txtusu.length === 0 || txtpas.length === 0) {
-      alert("COMPLETE LOS DATOS FALTANTES");
-    } else {
-      if (usu === "admin" && pas === "123456") {
-        setMiLogin("true");
-        document.getElementById("form_login").style.display = "none";
-      } else {
-        setMiLogin("false");
-        alert("Error de usuario o/y contraseña");
-        document.getElementById("txtusu").value = "";
-        document.getElementById("txtpas").value = "";
-        document.getElementById("txtpas").focus();
-      }
-    }
-  }
-
+  const onSubmit = (data) => {
+    console.log("send", data);
+    login(data);
+  };
   return (
-    <div
-      className="container"
-      style={{ background: "lightblue", marginTop: 20, padding: 20 }}
-    >
-      <div>
-        <form id="form_login">
-          <div>
-            <h1 style={{ color: "blue", textalign: "center" }}>Welcome!</h1>
-            <label htmlFor="txtusu">
-              <strong>Username</strong>
-            </label>
+    <div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "100px",
+        }}
+      >
+        <div
+          className="p-3 card shadow-lg p-3 mb-5 bg-body rounded"
+          style={{ width: "20rem" }}
+        >
+          <h3>Welcome</h3>
+          <div className="form-outline mb-4">
             <input
-              type="text"
-              id="txtusu"
-              style={{ textAlign: "center" }}
+              {...register("email", {
+                required: {
+                  value: true,
+                  message: "This field is required",
+                },
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "invalid email address",
+                },
+              })}
               className="form-control"
-              onChange={(e) => setUsu(e.target.value)}
-              required
             />
-          </div>
-          <div>
-            <label htmlFor="txtpas">
-              <strong>Password</strong>
+            <label className="form-label" htmlFor="form2Example1">
+              Email address
             </label>
+            <br />
+            {errors.email?.message && (
+              <span className="text-danger">{errors.email?.message}</span>
+            )}
+          </div>
+
+          <div className="form-outline mb-4">
             <input
               type="password"
-              id="txtpas"
-              style={{ textAlign: "center" }}
+              id="form2Example2"
               className="form-control"
-              onChange={(e) => setPas(e.target.value)}
-              required
+              {...register("password", { required: true })}
             />
+            <label className="form-label" htmlFor="form2Example2">
+              Password
+            </label>
+            <br />
+            {errors.password?.type === "required" && (
+              <span className="text-danger">This field is required</span>
+            )}
           </div>
-          <br />
-          <input
-            type="submit"
-            className="btn btn-primary"
-            value="Login"
-            onClick={iniciarSesion}
-          />
-        </form>
 
-        {miLogin === "true" && <Home usu={usu} />}
+          <div className="row mb-4">
+            <div className="col d-flex justify-content-center">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value=""
+                  onChange={() => {}}
+                  id="form2Example31"
+                  checked
+                />
+                <label className="form-check-label" htmlFor="form2Example31">
+                  {" "}
+                  Remember me{" "}
+                </label>
+              </div>
+            </div>
+          </div>
 
-      </div>
+          <button type="submit" className="btn btn-primary btn-block mb-4">
+            Login
+          </button>
 
+          <div className="text-center">
+            <p>
+              Not a member? <Link to={"signup"}>Register</Link>
+            </p>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };

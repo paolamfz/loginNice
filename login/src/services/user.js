@@ -1,11 +1,32 @@
-export const headers = {
-    'Content-Type': 'application/json',
-    'Authorization' : 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0IiwiaWF0IjoxNjU4NDI0MDg3LCJzdWIiOiJmbGxhbm9zQGdtYWlsLmNvbSIsImlzcyI6Ik1haW4iLCJleHAiOjE2NTkwMjg4ODd9.2sK9x6RSJlS8S-3KS1fQuRvmoja-HLOBGlIcYD163k8'
+const API_URL = "http://localhost:8090/Api";
 
-}
+export const login = (data) => {
+  fetch(`${API_URL}/Auth`, {
+    method: "POST", // or 'PUT'
+    body: JSON.stringify(data), // data can be `string` or {object}!
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => console.log(response))
+    .catch((error) => console.error("Error:", error));
+};
 
-export const getAll = () => 
-    fetch (`http://localhost:8090/Api/users`, {method : 'GET', headers})
-    .then((res) => res.json ())
-    .then((data) => data);
-    
+export const signup = (data) => {
+  fetch(`${API_URL}/users/createUser`, {
+    method: "POST", // or 'PUT'
+    body: JSON.stringify(data), // data can be `string` or {object}!
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => localStorage.setItem("token", "estevaser un token"))
+    .catch((error) => console.error("Error:", error));
+};
+
+/* export const getAll = () =>
+  fetch(`http://localhost:8090/Api/users`, { method: "GET", headers })
+    .then((res) => res.json())
+    .then((data) => data); */
