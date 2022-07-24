@@ -1,6 +1,8 @@
 package com.login_projectNICE.loginNICE.service;
 
 
+import com.login_projectNICE.loginNICE.dto.LoginResponse;
+import com.login_projectNICE.loginNICE.dto.UserDto;
 import com.login_projectNICE.loginNICE.models.User;
 import com.login_projectNICE.loginNICE.repository.UserRepository;
 import com.login_projectNICE.loginNICE.utils.JWTUtil;
@@ -37,13 +39,26 @@ public class UserService {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    public String login(User user) throws AccessDeniedException {
+    public LoginResponse login(User user) throws AccessDeniedException {
         System.out.println(user.getEmail()+"  "+user.getPassword());
+        LoginResponse loginResponse= new LoginResponse();
         User userFound = userRepository.validateUser(user.getEmail(), user.getPassword());
         if(userFound != null){
-            return jwtUtil.create(String.valueOf(userFound.getId()), userFound.getEmail());
+            String token = jwtUtil.create(String.valueOf(userFound.getId()), userFound.getEmail());
+            loginResponse.setUser(userToUserDto(userFound));
+            loginResponse.setToken((token));
+            return loginResponse;
         }else{
             throw new AccessDeniedException("Error en el login");
         }
+    }
+
+    private UserDto userToUserDto (User user){
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setLastname(user.getLastname());
+        userDto.setEmail(user.getEmail());
+        return userDto;
     }
 }

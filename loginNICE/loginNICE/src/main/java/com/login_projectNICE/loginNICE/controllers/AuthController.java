@@ -1,5 +1,6 @@
 package com.login_projectNICE.loginNICE.controllers;
 
+import com.login_projectNICE.loginNICE.dto.LoginResponse;
 import com.login_projectNICE.loginNICE.models.User;
 import com.login_projectNICE.loginNICE.service.UserService;
 import lombok.AllArgsConstructor;
@@ -21,13 +22,8 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping
-    public ResponseToken login(@RequestBody User user) throws AccessDeniedException {
-        String token = userService.login(user);
-        return new ResponseToken(token);
+    public LoginResponse login(@RequestBody User user) throws AccessDeniedException {
+        return userService.login(user);
     }
 }
 
-@AllArgsConstructor
-class ResponseToken{
-    private String token;
-}

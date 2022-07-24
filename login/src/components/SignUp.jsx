@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { signup } from "../services/user";
+import { useNavigate } from "react-router-dom";
 
 export default function App() {
   const {
@@ -8,8 +9,11 @@ export default function App() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  let navigate = useNavigate();
+
   const onSubmit = (data) => {
     signup(data);
+    navigate("/");
   };
 
   return (

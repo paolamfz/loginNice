@@ -1,7 +1,7 @@
 const API_URL = "http://localhost:8090/Api";
 
-export const login = (data) => {
-  fetch(`${API_URL}/Auth`, {
+export const login = async (data) => {
+  let res = await fetch(`${API_URL}/Auth`, {
     method: "POST", // or 'PUT'
     body: JSON.stringify(data), // data can be `string` or {object}!
     headers: {
@@ -9,8 +9,16 @@ export const login = (data) => {
     },
   })
     .then((res) => res.json())
-    .then((response) => console.log(response))
-    .catch((error) => console.error("Error:", error));
+    .then((response) => {
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    });
+  console.log(res);
 };
 
 export const signup = (data) => {
@@ -22,7 +30,7 @@ export const signup = (data) => {
     },
   })
     .then((res) => res.json())
-    .then((response) => localStorage.setItem("token", "estevaser un token"))
+    .then((response) => console.log("Successfull"))
     .catch((error) => console.error("Error:", error));
 };
 

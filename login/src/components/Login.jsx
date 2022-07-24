@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { login } from "../services/user";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const {
@@ -9,10 +9,10 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const onSubmit = (data) => {
-    console.log("send", data);
-    login(data);
+  let navigate = useNavigate();
+  const onSubmit = async (data) => {
+    await login(data);
+    navigate("home");
   };
   return (
     <div>
@@ -69,22 +69,7 @@ export const Login = () => {
           </div>
 
           <div className="row mb-4">
-            <div className="col d-flex justify-content-center">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  onChange={() => {}}
-                  id="form2Example31"
-                  checked
-                />
-                <label className="form-check-label" htmlFor="form2Example31">
-                  {" "}
-                  Remember me{" "}
-                </label>
-              </div>
-            </div>
+            <div className="col d-flex justify-content-center"></div>
           </div>
 
           <button type="submit" className="btn btn-primary btn-block mb-4">
