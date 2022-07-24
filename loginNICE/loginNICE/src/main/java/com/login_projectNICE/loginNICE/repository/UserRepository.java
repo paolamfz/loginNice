@@ -5,6 +5,7 @@ import com.login_projectNICE.loginNICE.models.User;
 import java.util.List;
 import java.util.Optional;
 
+
 public interface UserRepository {
     List<User> getAll();
     Optional<User> create(User user);
